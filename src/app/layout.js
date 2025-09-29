@@ -1,11 +1,19 @@
 import "./globals.css";
+import { Rubik } from 'next/font/google';
 import { AuthProvider } from '../components/AuthProvider';
 
+const rubik = Rubik({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-rubik',
+  weight: ['300', '400', '500', '600', '700'],
+});
+
 export const metadata = {
-  title: "ScanCycle - Platform AI Manajemen Sampah Cerdas",
-  description: "Platform AI untuk mengidentifikasi, memilah, dan mengelola sampah dengan teknologi Gemini AI",
+  title: "ScanCycle - AI Waste Scanner",
+  description: "Platform AI untuk mengidentifikasi, memilah, dan mengelola sampah dengan teknologi AI",
   keywords: "sampah, AI, pemilahan sampah, lingkungan, daur ulang, Indonesia",
-  authors: [{ name: "ScanCycle Team" }],
+  authors: [{ name: "Slaviors" }],
 };
 
 export const viewport = {
@@ -17,7 +25,7 @@ export const viewport = {
 export default function RootLayout({ children }) {
   return (
     <html lang="id">
-      <body className="antialiased min-h-screen bg-gray-50">
+      <body className={`${rubik.variable} antialiased min-h-screen bg-gray-50 font-rubik`}>
         <AuthProvider>
           {children}
         </AuthProvider>

@@ -26,9 +26,18 @@ export async function GET() {
       [userId]
     );
 
-    // Get recent scan history
+    // Get recent scan history with full details for modal
     const recentScans = await executeQuery(`
-      SELECT waste_type, item_name, category, bin_color, created_at
+      SELECT 
+        waste_type, 
+        item_name, 
+        category, 
+        bin_color, 
+        disposal_tips,
+        recyclable,
+        decomposition_time,
+        confidence,
+        created_at
       FROM scan_history 
       WHERE user_id = ?
       ORDER BY created_at DESC

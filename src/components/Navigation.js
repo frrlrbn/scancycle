@@ -14,7 +14,7 @@ export default function Navigation({ activeTab, onTabChange }) {
   ];
 
   return (
-    <nav className="bg-white border-t border-gray-200 sticky bottom-0 z-50">
+    <nav className="bg-white border-t border-gray-200 fixed bottom-0 left-0 right-0 z-50">
       <div className="max-w-7xl mx-auto">
         <div className="flex justify-around">
           {tabs.map((tab) => {
