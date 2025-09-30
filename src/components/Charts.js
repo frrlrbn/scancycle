@@ -11,6 +11,7 @@ import {
   ArcElement,
 } from 'chart.js';
 import { Doughnut, Bar } from 'react-chartjs-2';
+import { getWasteTypeColor, getWasteTypeBorderColor, getWasteTypeLabel } from '../utils/wasteColors';
 
 ChartJS.register(
   CategoryScale,
@@ -23,34 +24,21 @@ ChartJS.register(
 );
 
 export function DonutChart({ data, title }) {
+  // Sort data to ensure consistent color mapping: organic, inorganic, hazardous
+  const sortedData = [...data].sort((a, b) => {
+    const order = { 'organic': 0, 'inorganic': 1, 'hazardous': 2 };
+    return order[a.waste_type] - order[b.waste_type];
+  });
+
   const chartData = {
-    labels: data.map(item => {
-      switch (item.waste_type) {
-        case 'organic': return 'Organik';
-        case 'inorganic': return 'Anorganik';
-        case 'hazardous': return 'B3';
-        default: return item.waste_type;
-      }
-    }),
+    labels: sortedData.map(item => getWasteTypeLabel(item.waste_type)),
     datasets: [
       {
-        data: data.map(item => item.count),
-        backgroundColor: [
-          '#10B981', // Green for Organic
-          '#F59E0B', // Yellow for Inorganic  
-          '#EF4444', // Red for Hazardous
-        ],
-        borderColor: [
-          '#059669', // Darker green border
-          '#D97706', // Darker yellow border
-          '#DC2626', // Darker red border
-        ],
+        data: sortedData.map(item => item.count),
+        backgroundColor: sortedData.map(item => getWasteTypeColor(item.waste_type)),
+        borderColor: sortedData.map(item => getWasteTypeBorderColor(item.waste_type)),
         borderWidth: 2,
-        hoverBackgroundColor: [
-          '#059669', // Darker green on hover
-          '#D97706', // Darker yellow on hover
-          '#DC2626', // Darker red on hover
-        ],
+        hoverBackgroundColor: sortedData.map(item => getWasteTypeBorderColor(item.waste_type)),
         hoverBorderWidth: 3,
       },
     ],
@@ -115,29 +103,20 @@ export function DonutChart({ data, title }) {
 }
 
 export function ProgressBarChart({ data, totalScans }) {
+  // Sort data to ensure consistent color mapping: organic, inorganic, hazardous
+  const sortedData = [...data].sort((a, b) => {
+    const order = { 'organic': 0, 'inorganic': 1, 'hazardous': 2 };
+    return order[a.waste_type] - order[b.waste_type];
+  });
+
   const chartData = {
-    labels: data.map(item => {
-      switch (item.waste_type) {
-        case 'organic': return 'Organik';
-        case 'inorganic': return 'Anorganik';
-        case 'hazardous': return 'B3';
-        default: return item.waste_type;
-      }
-    }),
+    labels: sortedData.map(item => getWasteTypeLabel(item.waste_type)),
     datasets: [
       {
         label: 'Jumlah Scan',
-        data: data.map(item => item.count),
-        backgroundColor: [
-          '#10B981', // Green for Organic
-          '#F59E0B', // Yellow for Inorganic
-          '#EF4444', // Red for Hazardous
-        ],
-        borderColor: [
-          '#059669', // Darker green border
-          '#D97706', // Darker yellow border
-          '#DC2626', // Darker red border
-        ],
+        data: sortedData.map(item => item.count),
+        backgroundColor: sortedData.map(item => getWasteTypeColor(item.waste_type)),
+        borderColor: sortedData.map(item => getWasteTypeBorderColor(item.waste_type)),
         borderWidth: 2,
         borderRadius: 8,
         borderSkipped: false,

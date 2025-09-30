@@ -7,6 +7,7 @@ import StatCard from './StatCard';
 import MobileStatCards from './MobileStatCards';
 import ScanDetailModal from './ScanDetailModal';
 import Footer from './Footer';
+import { getWasteTypeColor, getWasteTypeLabel, getWasteTypeBadgeColors } from '../utils/wasteColors';
 
 export default function Dashboard() {
   const { data: session } = useSession();
@@ -302,34 +303,22 @@ export default function Dashboard() {
             
             {/* Summary */}
             <div className="mt-6 grid grid-cols-3 gap-4 pt-4 border-t border-gray-200">
-              {stats.distribution.map((item) => {
+              {stats.distribution
+                .sort((a, b) => {
+                  const order = { 'organic': 0, 'inorganic': 1, 'hazardous': 2 };
+                  return order[a.waste_type] - order[b.waste_type];
+                })
+                .map((item) => {
                 const percentage = (item.count / totalScans) * 100;
-                const getColor = () => {
-                  switch (item.waste_type) {
-                    case 'organic': return '#10B981'; // Green
-                    case 'inorganic': return '#F59E0B'; // Yellow
-                    case 'hazardous': return '#EF4444'; // Red
-                    default: return '#6B7280';
-                  }
-                };
-
-                const getLabel = () => {
-                  switch (item.waste_type) {
-                    case 'organic': return 'Organik ';
-                    case 'inorganic': return 'Anorganik ';
-                    case 'hazardous': return 'B3 ';
-                    default: return item.waste_type;
-                  }
-                };
                 
                 return (
                   <div key={item.waste_type} className="text-center">
                     <div 
                       className="w-4 h-4 rounded-full mx-auto mb-2 border border-gray-300"
-                      style={{ backgroundColor: getColor() }}
+                      style={{ backgroundColor: getWasteTypeColor(item.waste_type) }}
                     ></div>
                     <p className="text-xs font-medium text-gray-600 font-rubik">
-                      {getLabel()}
+                      {getWasteTypeLabel(item.waste_type)}
                     </p>
                     <p className="text-sm font-bold text-gray-900 font-rubik">
                       {percentage.toFixed(1)}%
@@ -404,11 +393,9 @@ export default function Dashboard() {
                   <div className="flex items-start justify-between mb-2">
                     <div className="flex items-center space-x-3 flex-1 min-w-0">
                       <div className="relative flex-shrink-0">
-                        <div className={`w-4 h-4 rounded-full border border-gray-300 ${
-                          scan.bin_color === 'green' ? 'bg-emerald-500' :
-                          scan.bin_color === 'yellow' ? 'bg-amber-500' :
-                          scan.bin_color === 'red' ? 'bg-red-500' : 'bg-gray-500'
-                        } animate-pulse group-hover:animate-none`}></div>
+                        <div className={`w-4 h-4 rounded-full border border-gray-300 animate-pulse group-hover:animate-none`} style={{
+                          backgroundColor: getWasteTypeColor(scan.bin_color)
+                        }}></div>
                         <div className="absolute -top-1 -right-1 w-2 h-2 bg-white rounded-full border border-gray-300"></div>
                       </div>
                       <div className="flex-1 min-w-0">
@@ -420,14 +407,8 @@ export default function Dashboard() {
                         </p>
                       </div>
                     </div>
-                    <div className={`px-2 py-1 rounded-full text-xs font-medium border flex-shrink-0 ml-2 ${
-                      scan.bin_color === 'green' ? 'bg-emerald-50 text-emerald-700 border-emerald-200' :
-                      scan.bin_color === 'yellow' ? 'bg-amber-50 text-amber-700 border-amber-200' :
-                      scan.bin_color === 'red' ? 'bg-red-50 text-red-700 border-red-200' : 'bg-gray-50 text-gray-700 border-gray-200'
-                    }`}>
-                      {scan.bin_color === 'green' ? 'Organik' :
-                       scan.bin_color === 'yellow' ? 'Anorganik' :
-                       scan.bin_color === 'red' ? 'B3' : 'Unknown'}
+                    <div className={`px-2 py-1 rounded-full text-xs font-medium border flex-shrink-0 ml-2`} style={getWasteTypeBadgeColors(scan.bin_color)}>
+                      {getWasteTypeLabel(scan.bin_color)}
                     </div>
                   </div>
                   
@@ -458,11 +439,9 @@ export default function Dashboard() {
                 <div className="hidden sm:flex sm:items-center sm:justify-between">
                   <div className="flex items-center space-x-4 flex-1">
                     <div className="relative">
-                      <div className={`w-4 h-4 rounded-full border border-gray-300 ${
-                        scan.bin_color === 'green' ? 'bg-emerald-500' :
-                        scan.bin_color === 'yellow' ? 'bg-amber-500' :
-                        scan.bin_color === 'red' ? 'bg-red-500' : 'bg-gray-500'
-                      } animate-pulse group-hover:animate-none`}></div>
+                      <div className={`w-4 h-4 rounded-full border border-gray-300 animate-pulse group-hover:animate-none`} style={{
+                        backgroundColor: getWasteTypeColor(scan.bin_color)
+                      }}></div>
                       <div className="absolute -top-1 -right-1 w-2 h-2 bg-white rounded-full border border-gray-300"></div>
                     </div>
                     <div className="flex-1">
@@ -474,14 +453,8 @@ export default function Dashboard() {
                       </p>
                     </div>
                     
-                    <div className={`px-3 py-1 rounded-full text-xs font-medium border ${
-                      scan.bin_color === 'green' ? 'bg-emerald-50 text-emerald-700 border-emerald-200' :
-                      scan.bin_color === 'yellow' ? 'bg-amber-50 text-amber-700 border-amber-200' :
-                      scan.bin_color === 'red' ? 'bg-red-50 text-red-700 border-red-200' : 'bg-gray-50 text-gray-700 border-gray-200'
-                    }`}>
-                      {scan.bin_color === 'green' ? ' Organik' :
-                       scan.bin_color === 'yellow' ? ' Anorganik' :
-                       scan.bin_color === 'red' ? ' B3' : 'Unknown'}
+                    <div className={`px-3 py-1 rounded-full text-xs font-medium border`} style={getWasteTypeBadgeColors(scan.bin_color)}>
+                      {getWasteTypeLabel(scan.bin_color)}
                     </div>
                   </div>
                   
@@ -515,37 +488,60 @@ export default function Dashboard() {
 
       {/* No Data State */}
       {totalScans === 0 && (
-        <div className="text-center py-16 bg-gradient-to-br from-white to-gray-50 rounded-xl border-2 border-gray-200">
-          <div className="relative">
+        <div className="text-center py-8 sm:py-12 lg:py-16 px-4 sm:px-6 bg-gradient-to-br from-white to-gray-50 rounded-xl border-2 border-gray-200">
+          <div className="relative mb-4 sm:mb-6">
             <div className="absolute inset-0 bg-gradient-to-r from-primary to-secondary opacity-10 rounded-full transform rotate-12 border border-gray-200"></div>
-            <FaChartPie className="w-20 h-20 text-gray-300 mx-auto mb-6 relative z-10" />
+            <FaChartPie className="w-16 h-16 sm:w-20 sm:h-20 text-gray-300 mx-auto relative z-10" />
           </div>
           
-          <h3 className="text-2xl font-bold text-gray-900 mb-3 font-rubik">
+          <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2 sm:mb-3 font-rubik px-2">
             Mulai Perjalanan Anda! 🌱
           </h3>
-          <p className="text-gray-600 mb-6 max-w-md mx-auto font-rubik">
+          <p className="text-sm sm:text-base text-gray-600 mb-6 sm:mb-8 max-w-sm sm:max-w-md mx-auto font-rubik px-2 leading-relaxed">
             Scan sampah pertama Anda untuk melihat statistik menarik dan mulai berkontribusi untuk lingkungan
           </p>
           
-          <div className="flex justify-center space-x-8 mt-8">
+          {/* Mobile: Stacked Layout */}
+          <div className="block sm:hidden space-y-4 mt-6">
             <div className="text-center">
-              <div className="w-12 h-12 bg-secondary rounded-full flex items-center justify-center mx-auto mb-2">
-                <FaLeaf className="w-6 h-6 text-white" />
+              <div className="w-14 h-14 bg-secondary rounded-full flex items-center justify-center mx-auto mb-3  border-2 border-white">
+                <FaLeaf className="w-7 h-7 text-white" />
               </div>
               <p className="text-sm font-medium text-gray-700 font-rubik">Scan Sampah</p>
             </div>
             <div className="text-center">
-              <div className="w-12 h-12 bg-tertiary rounded-full flex items-center justify-center mx-auto mb-2">
-                <FaChartPie className="w-6 h-6 text-white" />
+              <div className="w-14 h-14 bg-tertiary rounded-full flex items-center justify-center mx-auto mb-3  border-2 border-white">
+                <FaChartPie className="w-7 h-7 text-white" />
               </div>
               <p className="text-sm font-medium text-gray-700 font-rubik">Lihat Stats</p>
             </div>
             <div className="text-center">
-              <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center mx-auto mb-2">
-                <FaLeaf className="w-6 h-6 text-white" />
+              <div className="w-14 h-14 bg-primary rounded-full flex items-center justify-center mx-auto mb-3  border-2 border-white">
+                <FaLeaf className="w-7 h-7 text-white" />
               </div>
               <p className="text-sm font-medium text-gray-700 font-rubik">Ramah Lingkungan</p>
+            </div>
+          </div>
+          
+          {/* Desktop: Horizontal Layout */}
+          <div className="hidden sm:flex justify-center space-x-6 lg:space-x-8 mt-8">
+            <div className="text-center">
+              <div className="w-12 h-12 lg:w-14 lg:h-14 bg-secondary rounded-full flex items-center justify-center mx-auto mb-2  border-2 border-white">
+                <FaLeaf className="w-6 h-6 lg:w-7 lg:h-7 text-white" />
+              </div>
+              <p className="text-sm lg:text-base font-medium text-gray-700 font-rubik">Scan Sampah</p>
+            </div>
+            <div className="text-center">
+              <div className="w-12 h-12 lg:w-14 lg:h-14 bg-tertiary rounded-full flex items-center justify-center mx-auto mb-2  border-2 border-white">
+                <FaChartPie className="w-6 h-6 lg:w-7 lg:h-7 text-white" />
+              </div>
+              <p className="text-sm lg:text-base font-medium text-gray-700 font-rubik">Lihat Stats</p>
+            </div>
+            <div className="text-center">
+              <div className="w-12 h-12 lg:w-14 lg:h-14 bg-primary rounded-full flex items-center justify-center mx-auto mb-2  border-2 border-white">
+                <FaLeaf className="w-6 h-6 lg:w-7 lg:h-7 text-white" />
+              </div>
+              <p className="text-sm lg:text-base font-medium text-gray-700 font-rubik">Ramah Lingkungan</p>
             </div>
           </div>
         </div>

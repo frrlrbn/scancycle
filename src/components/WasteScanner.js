@@ -183,13 +183,14 @@ export default function WasteScanner() {
               <button
                 onClick={() => fileInputRef.current?.click()}
                 disabled={isAnalyzing}
-                className="group relative overflow-hidden bg-gradient-to-br from-amber-500 to-orange-600 text-white py-6 px-4 rounded-xl transition-all duration-300 flex flex-col items-center space-y-3 hover:from-amber-600 hover:to-orange-700 active:scale-95 border-2 border-amber-400"
+                className="group relative overflow-hidden text-gray-700 py-6 px-4 rounded-xl transition-all duration-300 flex flex-col items-center space-y-3 hover:from-[#A8C89A] hover:to-[#F0F8E8] active:scale-95 border-2 border-[#B9D4AA]"
+                style={{ background: 'linear-gradient(to bottom right, #B9D4AA, #FAFFCA)' }}
               >
-                <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-200">
+                <div className="w-12 h-12 bg-white/40 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-200">
                   <FaUpload className="w-6 h-6" />
                 </div>
                 <span className="font-semibold font-rubik">Upload Foto</span>
-                <span className="text-xs text-amber-100 font-rubik">Dari galeri</span>
+                <span className="text-xs text-gray-600 font-rubik">Dari galeri</span>
               </button>
             </div>
 
@@ -221,19 +222,19 @@ export default function WasteScanner() {
               </h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm text-gray-600 font-rubik">
                 <div className="flex items-center space-x-2">
-                  <span className="w-2 h-2 bg-green-500 rounded-full"></span>
+                  <span className="w-2 h-2 bg-green-800 rounded-full"></span>
                   <span>Identifikasi otomatis</span>
                 </div>
                 <div className="flex items-center space-x-2">
-                  <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
+                  <span className="w-2 h-2 bg-green-800 rounded-full"></span>
                   <span>Panduan pemilahan</span>
                 </div>
                 <div className="flex items-center space-x-2">
-                  <span className="w-2 h-2 bg-purple-500 rounded-full"></span>
+                  <span className="w-2 h-2 bg-green-800 rounded-full"></span>
                   <span>Tips daur ulang</span>
                 </div>
                 <div className="flex items-center space-x-2">
-                  <span className="w-2 h-2 bg-orange-500 rounded-full"></span>
+                  <span className="w-2 h-2 bg-green-800 rounded-full"></span>
                   <span>Akurasi tinggi</span>
                 </div>
               </div>

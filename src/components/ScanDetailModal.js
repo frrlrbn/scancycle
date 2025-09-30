@@ -105,25 +105,27 @@ export default function ScanDetailModal({ scan, isOpen, onClose }) {
   if (!isOpen || !scan) return null;
 
   return (
-    <div className="fixed inset-0 z-[9999] flex items-end sm:items-center justify-center p-0 sm:p-4">
+    <div className="fixed inset-0 z-[10000] flex items-start sm:items-center justify-center p-0 sm:p-4 pt-4 sm:pt-0" style={{ height: '100vh', height: '100dvh' }}>
       {/* Backdrop */}
       <div 
         className={`absolute inset-0 bg-black/60 backdrop-blur-sm transition-all duration-300 ${
           isAnimating ? 'opacity-100' : 'opacity-0'
         }`}
+        style={{ height: '100vh', height: '100dvh' }}
         onClick={handleClose}
       />
 
       {/* Modal Container */}
       <div 
-        className={`relative bg-white rounded-t-2xl sm:rounded-2xl w-full sm:w-auto sm:min-w-[500px] sm:max-w-[90vw] lg:max-w-2xl max-h-[92vh] sm:max-h-[85vh] flex flex-col border-2 border-gray-200 transition-all duration-300 transform overflow-hidden ${
+        className={`relative bg-white rounded-t-2xl sm:rounded-2xl w-full sm:w-auto sm:min-w-[500px] sm:max-w-[90vw] lg:max-w-2xl h-full sm:h-auto sm:max-h-[85vh] flex flex-col border-2 border-gray-200 transition-all duration-300 transform overflow-hidden ${
           isAnimating 
             ? 'translate-y-0 sm:scale-100 opacity-100' 
             : 'translate-y-full sm:translate-y-0 sm:scale-95 opacity-0'
         }`}
         style={{ 
           paddingBottom: 'env(safe-area-inset-bottom, 0px)',
-          borderRadius: window.innerWidth >= 640 ? '1rem' : '1rem 1rem 0 0'
+          borderRadius: window.innerWidth >= 640 ? '1rem' : '1rem 1rem 0 0',
+          marginTop: window.innerWidth < 640 ? '1rem' : '0'
         }}
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
@@ -164,7 +166,7 @@ export default function ScanDetailModal({ scan, isOpen, onClose }) {
         </div>
 
         {/* Content */}
-        <div className="flex-1 overflow-y-auto scrollbar-thin">
+        <div className="flex-1 overflow-y-auto scrollbar-thin min-h-0">
           <div className="p-4 sm:p-6 space-y-6 pb-8">
             {/* Item Info */}
             <div className="space-y-4">
